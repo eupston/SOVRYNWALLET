@@ -75,6 +75,16 @@ let chart1_2_options = {
 // #########################################
 let chartExample1 = {
   data1: (canvas) => {
+    const options = { method: "GET" };
+    fetch(
+        `${process.env.REACT_APP_COVALENT_API_URL}/${process.env.REACT_APP_RSK_TESTNET_ID}/address/${process.env.REACT_APP_RSK_TESTNET_TEST_ACT}/portfolio_v2/?&key=${process.env.REACT_APP_COVALENT_API_KEY}`,
+        options
+    ).then((response) => {
+      console.info(response)
+      const res = response.json()
+      console.info(res)
+    });
+
     let ctx = canvas.getContext("2d");
 
     let gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
@@ -217,13 +227,14 @@ let chartExample1 = {
 // #########################################
 let chartExample2 = {
   data: (canvas) => {
+
     let ctx = canvas.getContext("2d");
 
     let gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
 
     gradientStroke.addColorStop(1, "rgba(237,179,5,0.2)");
     gradientStroke.addColorStop(0.4, "rgba(237,179,5,0.0)");
-    gradientStroke.addColorStop(0, "rgba(237,179,5,0)"); //blue colors
+    gradientStroke.addColorStop(0, "rgba(237,179,5,0)");
 
     return {
       labels: ["JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
