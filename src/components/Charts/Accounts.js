@@ -1,7 +1,8 @@
 import {Line} from "react-chartjs-2";
-import {Card, CardBody, CardHeader, CardTitle, Col, Row} from "reactstrap";
+import {Card, CardBody, CardHeader, CardTitle, Col, Row, ButtonGroup, Button} from "reactstrap";
 
 import React, {Component} from 'react';
+import {abbreviateNumber} from "../../utils/Numbers";
 
 class Accounts extends Component {
     constructor(props) {
@@ -30,7 +31,7 @@ class Accounts extends Component {
                             barPercentage: 1.6,
                             gridLines: {
                                 drawBorder: false,
-                                color: "rgba(29,140,248,0.0)",
+                                color: "rgba(34,116,165,0.0)",
                                 zeroLineColor: "transparent",
                             },
                             ticks: {
@@ -38,6 +39,9 @@ class Accounts extends Component {
                                 suggestedMax: 125,
                                 padding: 20,
                                 fontColor: "#9a9a9a",
+                                callback: function(value) {
+                                    return abbreviateNumber(value);
+                                }
                             },
                         },
                     ],
@@ -46,7 +50,7 @@ class Accounts extends Component {
                             barPercentage: 1.6,
                             gridLines: {
                                 drawBorder: false,
-                                color: "rgba(29,140,248,0.1)",
+                                color: "rgba(34,116,165,0.1)",
                                 zeroLineColor: "transparent",
                             },
                             ticks: {
@@ -56,15 +60,20 @@ class Accounts extends Component {
                         },
                     ],
                 },
-            }
+            },
+            allTokens: [],
+            currentToken: {},
         };
     }
     async componentDidMount() {
         const response = await fetch(`${process.env.REACT_APP_COVALENT_API_URL}/${process.env.REACT_APP_RSK_TESTNET_ID}/address/${process.env.REACT_APP_RSK_TESTNET_TEST_ACT}/portfolio_v2/?&key=${process.env.REACT_APP_COVALENT_API_KEY}`)
-        const json = await response.json();
+        const resJson = await response.json();
+        console.info(resJson)
         this.setState({
-            data: json.items[0].holdings.map(item => item.close.balance),
-            labels: json.items[0].holdings.map(item => item.timestamp)
+            allTokens: resJson.items,
+            currentToken: resJson.items[0],
+            currentTokenBalances: resJson.items[0].holdings.map(item => ++item.close.balance).reverse(),
+            currentTokenDates: resJson.items[0].holdings.map(item => item.timestamp.split("T")[0]).reverse()
         });
     }
 
@@ -78,7 +87,7 @@ class Accounts extends Component {
             gradientStroke.addColorStop(0, "rgba(34,116,165,0)");
 
             return {
-                labels: this.state.labels,
+                labels: this.state.currentTokenDates,
                 datasets: [
                     {
                         fill: true,
@@ -94,18 +103,50 @@ class Accounts extends Component {
                         pointHoverRadius: 4,
                         pointHoverBorderWidth: 15,
                         pointRadius: 4,
-                        data: this.state.data,
+                        data: this.state.currentTokenBalances,
                     },
                 ],
             };
         }
+        const tokenButtonGroup = () => {
+            return this.state.allTokens && this.state.allTokens.map(token => {
+                return (
+                    <ButtonGroup className="btn-group-toggle float-right" data-toggle="buttons">
+                        <Button
+                            tag="label"
+                            className={{ active: token.contract_ticker_symbol === this.state.currentToken.contract_ticker_symbol}}
+                            style={{'margin-bottom': "20px"}}
+                            color="info"
+                            id="0"
+                            size="sm"
+                            onClick={() => {
+                              this.setState({
+                                  currentToken: token,
+                                  currentTokenBalances: token.holdings.map(item => ++item.close.balance).reverse(),
+                                  currentTokenDates: token.holdings.map(item => item.timestamp.split("T")[0]).reverse()
+                              })
+                            }}
+                        >
+                            <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
+                              {token.contract_ticker_symbol}
+                            </span>
+                            <span className="d-block d-sm-none">
+                            </span>
+                        </Button>
+                    </ButtonGroup>
+                )
+            });
+        };
         return (
             <Card className="card-chart">
                 <CardHeader>
                     <Row>
                         <Col className="text-left" sm="6">
                             <h5 className="card-category">Account Balance</h5>
-                            <CardTitle tag="h2">Historical</CardTitle>
+                            <CardTitle tag="h2">{this.state.currentToken.contract_ticker_symbol ? this.state.currentToken.contract_ticker_symbol + " Historical" : null}</CardTitle>
+                        </Col>
+                        <Col sm="6">
+                            {tokenButtonGroup()}
                         </Col>
                     </Row>
                 </CardHeader>

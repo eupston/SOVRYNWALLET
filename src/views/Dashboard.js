@@ -50,48 +50,48 @@ function Dashboard() {
           <Col xs="12">
             <Accounts />
           </Col>
-        </Row>
-        <Row>
-          <Col lg="4">
-            <Card className="card-chart">
-              <CardHeader>
-                <h5 className="card-category">Total Shipments</h5>
-                <CardTitle tag="h3">
-                  <i className="tim-icons icon-bell-55" style={{color:"#EDB305"}} /> 763,215
-                </CardTitle>
-              </CardHeader>
-              <CardBody>
-                <div className="chart-area">
-                  <Line
-                    data={chartExample2.data}
-                    options={chartExample2.options}
-                  />
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg="4">
-            <Balance/>
-          </Col>
-          <Col lg="4">
-            <Card className="card-chart">
-              <CardHeader>
-                <h5 className="card-category">Completed Tasks</h5>
-                <CardTitle tag="h3">
-                  <i className="tim-icons icon-send text-success" /> 12,100K
-                </CardTitle>
-              </CardHeader>
-              <CardBody>
-                <div className="chart-area">
-                  <Pie
-                    data={chartExample4.data}
-                    options={chartExample4.options}
-                  />
-                </div>
-              </CardBody>
-            </Card>
+          <Col xs="12">
+            <Balance />
           </Col>
         </Row>
+        {/*<Row>*/}
+        {/*  <Col lg="4">*/}
+        {/*    <Card className="card-chart">*/}
+        {/*      <CardHeader>*/}
+        {/*        <h5 className="card-category">Total Shipments</h5>*/}
+        {/*        <CardTitle tag="h3">*/}
+        {/*          <i className="tim-icons icon-bell-55" style={{color:"#EDB305"}} /> 763,215*/}
+        {/*        </CardTitle>*/}
+        {/*      </CardHeader>*/}
+        {/*      <CardBody>*/}
+        {/*        <div className="chart-area">*/}
+        {/*          <Line*/}
+        {/*            data={chartExample2.data}*/}
+        {/*            options={chartExample2.options}*/}
+        {/*          />*/}
+        {/*        </div>*/}
+        {/*      </CardBody>*/}
+        {/*    </Card>*/}
+        {/*  </Col>*/}
+        {/*  <Col lg="4">*/}
+        {/*    <Card className="card-chart">*/}
+        {/*      <CardHeader>*/}
+        {/*        <h5 className="card-category">Completed Tasks</h5>*/}
+        {/*        <CardTitle tag="h3">*/}
+        {/*          <i className="tim-icons icon-send text-success" /> 12,100K*/}
+        {/*        </CardTitle>*/}
+        {/*      </CardHeader>*/}
+        {/*      <CardBody>*/}
+        {/*        <div className="chart-area">*/}
+        {/*          <Pie*/}
+        {/*            data={chartExample4.data}*/}
+        {/*            options={chartExample4.options}*/}
+        {/*          />*/}
+        {/*        </div>*/}
+        {/*      </CardBody>*/}
+        {/*    </Card>*/}
+        {/*  </Col>*/}
+        {/*</Row>*/}
       </div>
     </>
   );

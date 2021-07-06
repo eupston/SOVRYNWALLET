@@ -1,7 +1,17 @@
-import {Card, CardBody, CardHeader, CardTitle, Col, Row} from "reactstrap";
-import {Bar} from "react-chartjs-2";
+import {
+    Card,
+    CardBody,
+    CardHeader,
+    CardTitle,
+    Col,
+    Row,
+    ButtonGroup,
+    Button
+} from "reactstrap";
+import {Pie} from "react-chartjs-2";
 
 import React, {Component} from 'react';
+import {abbreviateNumber} from "../../utils/Numbers";
 
 class Balance extends Component {
     constructor(props) {
@@ -23,56 +33,23 @@ class Balance extends Component {
                     intersect: 0,
                     position: "nearest",
                 },
-                responsive: true,
-                scales: {
-                    yAxes: [
-                        {
-                            gridLines: {
-                                drawBorder: false,
-                                color: "rgba(225,78,202,0.1)",
-                                zeroLineColor: "transparent",
-                            },
-                            ticks: {
-                                suggestedMin: 60,
-                                suggestedMax: 120,
-                                padding: 20,
-                                fontColor: "#9e9e9e",
-                            },
-                        },
-                    ],
-                    xAxes: [
-                        {
-                            gridLines: {
-                                drawBorder: false,
-                                color: "rgba(225,78,202,0.1)",
-                                zeroLineColor: "transparent",
-                            },
-                            ticks: {
-                                padding: 20,
-                                fontColor: "#9e9e9e",
-                            },
-                        },
-                    ],
-                },
-            }
+            },
+            responsive: true,
+            allTokens: [],
+            currentToken: {},
         };
     }
     async componentDidMount() {
         const response = await fetch(`${process.env.REACT_APP_COVALENT_API_URL}/${process.env.REACT_APP_RSK_TESTNET_ID}/address/${process.env.REACT_APP_RSK_TESTNET_TEST_ACT}/balances_v2/?&key=${process.env.REACT_APP_COVALENT_API_KEY}`)
-        const json = await response.json();
-        console.info('balance ',json)
+        const resJson = await response.json();
         this.setState({
-            data: json.data.items.map(item => item.balance),
-            labels: json.data.items.map(item => item.contract_ticker_symbol),
-            currentBalance: json.data.items[0].balance,
-            currentToken: json.data.items[0].contract_ticker_symbol,
+            allTokens: resJson.data.items,
+            currentToken: resJson.data.items[0],
         });
     }
-
     render() {
         const chartData = (canvas) => {
             let ctx = canvas.getContext("2d");
-
             let gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
 
             gradientStroke.addColorStop(1, "rgba(237,179,5,0.2)");
@@ -80,7 +57,7 @@ class Balance extends Component {
             gradientStroke.addColorStop(0, "rgba(237,179,5,0)");
 
             return {
-                labels: this.state.labels,
+                labels: [this.state.currentToken.contract_ticker_symbol],
                 datasets: [
                     {
                         label: "Token",
@@ -91,26 +68,55 @@ class Balance extends Component {
                         borderWidth: 2,
                         borderDash: [],
                         borderDashOffset: 0.0,
-                        data: this.state.data,
+                        data: [this.state.currentToken.balance],
                     },
                 ],
             };
         }
+
+        const tokenButtonGroup = () => {
+            return this.state.allTokens && this.state.allTokens.map(token => {
+                return (
+                    <ButtonGroup className="btn-group-toggle" data-toggle="buttons">
+                        <Button
+                            tag="label"
+                            className={{ active: token.contract_ticker_symbol === this.state.currentToken.contract_ticker_symbol}}
+                            style={{'margin-bottom': "20px"}}
+                            color="primary"
+                            id="0"
+                            size="sm"
+                            onClick={() => this.setState({currentToken: token})}
+                        >
+                            <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
+                              {token.contract_ticker_symbol}
+                            </span>
+                            <span className="d-block d-sm-none">
+                            </span>
+                        </Button>
+                    </ButtonGroup>
+                )
+            });
+        };
         return (
             <Card className="card-chart">
                 <CardHeader>
                     <Row>
-                        <Col className="text-left" sm="6">
+                        <Col className="text-left" sm="10">
                             <h5 className="card-category">Account Balance</h5>
-                            <CardTitle tag="h4">{this.state.currentBalance}</CardTitle>
                         </Col>
+                        <CardTitle style={{'margin-left': "15px",'margin-right': "10px" }} tag="h4">
+                            {this.state.currentToken.balance ? abbreviateNumber(++this.state.currentToken.balance) + " " + this.state.currentToken.contract_ticker_symbol : null}
+                        </CardTitle>
                     </Row>
                 </CardHeader>
                 <CardBody>
                     <div className="chart-area">
-                        <Bar data={chartData} options={this.state.options} />
+                        <Pie data={chartData} options={this.state.options} />
                     </div>
                 </CardBody>
+                <Col sm="6">
+                    {tokenButtonGroup()}
+                </Col>
             </Card>
         )
     }
