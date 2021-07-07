@@ -11,7 +11,7 @@ import {
 import {Pie} from "react-chartjs-2";
 
 import React, {Component} from 'react';
-import {abbreviateNumber} from "../../utils/Numbers";
+import {truncateFloat} from "../../utils/Numbers";
 
 class Balance extends Component {
     constructor(props) {
@@ -68,17 +68,18 @@ class Balance extends Component {
                         borderWidth: 2,
                         borderDash: [],
                         borderDashOffset: 0.0,
-                        data: [this.state.currentToken.balance],
+                        data: [(this.state.currentToken.balance / 10** this.state.currentToken.contract_decimals)],
                     },
                 ],
             };
         }
 
         const tokenButtonGroup = () => {
-            return this.state.allTokens && this.state.allTokens.map(token => {
+            return this.state.allTokens && this.state.allTokens.map((token, id) => {
                 return (
-                    <ButtonGroup className="btn-group-toggle" data-toggle="buttons">
+                    <ButtonGroup key={id} className="btn-group-toggle" data-toggle="buttons">
                         <Button
+                            key={id}
                             tag="label"
                             className={{ active: token.contract_ticker_symbol === this.state.currentToken.contract_ticker_symbol}}
                             style={{'margin-bottom': "20px"}}
@@ -104,8 +105,8 @@ class Balance extends Component {
                         <Col className="text-left" sm="10">
                             <h5 className="card-category">Account Balance</h5>
                         </Col>
-                        <CardTitle style={{'margin-left': "15px",'margin-right': "10px" }} tag="h4">
-                            {this.state.currentToken.balance ? abbreviateNumber(++this.state.currentToken.balance) + " " + this.state.currentToken.contract_ticker_symbol : null}
+                        <CardTitle style={{'margin-left': "15px" }} tag="h4">
+                            {this.state.currentToken.balance ? truncateFloat((this.state.currentToken.balance / 10** this.state.currentToken.contract_decimals), 3) + " " + this.state.currentToken.contract_ticker_symbol : null}
                         </CardTitle>
                     </Row>
                 </CardHeader>

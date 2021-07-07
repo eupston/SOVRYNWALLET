@@ -27,3 +27,11 @@ export const abbreviateNumber = (value) => {
     }
     return newValue;
 }
+
+export const truncateFloat = function(value, precision) {
+    let pMult = 1.0;
+    while (precision--) {
+        pMult *= 10;
+    }
+    return ((value * pMult) >> 0) / pMult;
+}

@@ -17,8 +17,7 @@
 */
 import Dashboard from "views/Dashboard.js";
 import Icons from "views/Icons.js";
-import Map from "views/Map.js";
-import Notifications from "views/Notifications.js";
+import NFTs from "views/NFTs.js";
 import TableList from "views/TableList.js";
 import Typography from "views/Typography.js";
 import UserProfile from "views/UserProfile.js";
@@ -26,9 +25,16 @@ import UserProfile from "views/UserProfile.js";
 var routes = [
   {
     path: "/dashboard",
-    name: "Dashboard",
+    name: "Account",
     icon: "tim-icons icon-chart-pie-36",
     component: Dashboard,
+    layout: "/admin",
+  },
+  {
+    path: "/nft",
+    name: "NFTs",
+    icon: "tim-icons icon-app",
+    component: NFTs,
     layout: "/admin",
   },
   {
@@ -36,13 +42,6 @@ var routes = [
     name: "Icons",
     icon: "tim-icons icon-atom",
     component: Icons,
-    layout: "/admin",
-  },
-  {
-    path: "/notifications",
-    name: "Notifications",
-    icon: "tim-icons icon-bell-55",
-    component: Notifications,
     layout: "/admin",
   },
   {

@@ -2,7 +2,7 @@ import {Line} from "react-chartjs-2";
 import {Card, CardBody, CardHeader, CardTitle, Col, Row, ButtonGroup, Button} from "reactstrap";
 
 import React, {Component} from 'react';
-import {abbreviateNumber} from "../../utils/Numbers";
+import {truncateFloat} from "../../utils/Numbers";
 
 class Accounts extends Component {
     constructor(props) {
@@ -35,12 +35,12 @@ class Accounts extends Component {
                                 zeroLineColor: "transparent",
                             },
                             ticks: {
-                                suggestedMin: 60,
-                                suggestedMax: 125,
+                                suggestedMin: 0,
+                                suggestedMax: 0,
                                 padding: 20,
                                 fontColor: "#9a9a9a",
                                 callback: function(value) {
-                                    return abbreviateNumber(value);
+                                    return truncateFloat(value, 2);
                                 }
                             },
                         },
@@ -68,11 +68,10 @@ class Accounts extends Component {
     async componentDidMount() {
         const response = await fetch(`${process.env.REACT_APP_COVALENT_API_URL}/${process.env.REACT_APP_RSK_TESTNET_ID}/address/${process.env.REACT_APP_RSK_TESTNET_TEST_ACT}/portfolio_v2/?&key=${process.env.REACT_APP_COVALENT_API_KEY}`)
         const resJson = await response.json();
-        console.info(resJson)
         this.setState({
             allTokens: resJson.items,
             currentToken: resJson.items[0],
-            currentTokenBalances: resJson.items[0].holdings.map(item => ++item.close.balance).reverse(),
+            currentTokenBalances: resJson.items[0].holdings.map(item => (++item.close.balance / 10** resJson.items[0].contract_decimals)).reverse(),
             currentTokenDates: resJson.items[0].holdings.map(item => item.timestamp.split("T")[0]).reverse()
         });
     }
@@ -109,10 +108,11 @@ class Accounts extends Component {
             };
         }
         const tokenButtonGroup = () => {
-            return this.state.allTokens && this.state.allTokens.map(token => {
+            return this.state.allTokens && this.state.allTokens.map((token, id) => {
                 return (
-                    <ButtonGroup className="btn-group-toggle float-right" data-toggle="buttons">
+                    <ButtonGroup key={id} className="btn-group-toggle float-right" data-toggle="buttons">
                         <Button
+                            key={id}
                             tag="label"
                             className={{ active: token.contract_ticker_symbol === this.state.currentToken.contract_ticker_symbol}}
                             style={{'margin-bottom': "20px"}}
@@ -122,7 +122,7 @@ class Accounts extends Component {
                             onClick={() => {
                               this.setState({
                                   currentToken: token,
-                                  currentTokenBalances: token.holdings.map(item => ++item.close.balance).reverse(),
+                                  currentTokenBalances: token.holdings.map(item => (++item.close.balance / 10** token.contract_decimals)).reverse(),
                                   currentTokenDates: token.holdings.map(item => item.timestamp.split("T")[0]).reverse()
                               })
                             }}
