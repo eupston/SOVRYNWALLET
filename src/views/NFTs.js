@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from "react";
 import {
-  Alert,
-  UncontrolledAlert,
   Card,
   CardHeader,
   CardBody,
@@ -37,7 +35,7 @@ function NFTs() {
               <img
                   style={{"margin": "50px"}}
                   src={nft.logo_url? nft.logo_url : require("assets/img/default_NFT_img.png").default}
-                  alt="Image not Found">
+                  alt="">
               </img>
             </Card>
       );
