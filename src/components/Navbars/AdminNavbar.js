@@ -18,6 +18,7 @@
 import React from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
+import Toggle from 'react-toggle'
 
 // reactstrap components
 import {
@@ -36,13 +37,18 @@ import {
   Container,
   Modal,
   NavbarToggler,
-  ModalHeader,
+  ModalHeader, Badge,
 } from "reactstrap";
+
+import "react-toggle/style.css"
+import {ThemeContext, themes} from "../../contexts/ThemeContext"; // for ES6 modules
 
 function AdminNavbar(props) {
   const [collapseOpen, setcollapseOpen] = React.useState(false);
   const [modalSearch, setmodalSearch] = React.useState(false);
   const [color, setcolor] = React.useState("navbar-transparent");
+  const [lightModeEnabled, setLightModeEnabled] = React.useState(false);
+
   React.useEffect(() => {
     window.addEventListener("resize", updateColor);
     // Specify how to clean up after this effect:
@@ -98,51 +104,6 @@ function AdminNavbar(props) {
           </NavbarToggler>
           <Collapse navbar isOpen={collapseOpen}>
             <Nav className="ml-auto" navbar>
-              <InputGroup className="search-bar">
-                <Button color="link" onClick={toggleModalSearch}>
-                  <i className="tim-icons icon-zoom-split" />
-                  <span className="d-lg-none d-md-block">Search</span>
-                </Button>
-              </InputGroup>
-              <UncontrolledDropdown nav>
-                <DropdownToggle
-                  caret
-                  color="default"
-                  data-toggle="dropdown"
-                  nav
-                >
-                  <div className="notification d-none d-lg-block d-xl-block" />
-                  <i className="tim-icons icon-sound-wave" />
-                  <p className="d-lg-none">Notifications</p>
-                </DropdownToggle>
-                <DropdownMenu className="dropdown-navbar" right tag="ul">
-                  <NavLink tag="li">
-                    <DropdownItem className="nav-item">
-                      Mike John responded to your email
-                    </DropdownItem>
-                  </NavLink>
-                  <NavLink tag="li">
-                    <DropdownItem className="nav-item">
-                      You have 5 more tasks
-                    </DropdownItem>
-                  </NavLink>
-                  <NavLink tag="li">
-                    <DropdownItem className="nav-item">
-                      Your friend Michael is in town
-                    </DropdownItem>
-                  </NavLink>
-                  <NavLink tag="li">
-                    <DropdownItem className="nav-item">
-                      Another notification
-                    </DropdownItem>
-                  </NavLink>
-                  <NavLink tag="li">
-                    <DropdownItem className="nav-item">
-                      Another one
-                    </DropdownItem>
-                  </NavLink>
-                </DropdownMenu>
-              </UncontrolledDropdown>
               <UncontrolledDropdown nav>
                 <DropdownToggle
                   caret
@@ -172,6 +133,31 @@ function AdminNavbar(props) {
                   </NavLink>
                 </DropdownMenu>
               </UncontrolledDropdown>
+              <ThemeContext.Consumer>
+                {({ changeTheme }) => (
+                    <Toggle
+                        icons={false}
+                        defaultChecked={true}
+                        className='daynight'
+                        icons={{
+                          checked:'🌜',
+                          unchecked:'🌞',
+                        }}
+                        onChange={
+                          () => {
+                            if(lightModeEnabled) {
+                              changeTheme(themes.dark)
+                              setLightModeEnabled(false)
+                            }
+                            else{
+                              changeTheme(themes.light)
+                              setLightModeEnabled(true)
+                            }
+                          }
+                        }
+                    />
+                )}
+              </ThemeContext.Consumer>
               <li className="separator d-lg-none" />
             </Nav>
           </Collapse>
