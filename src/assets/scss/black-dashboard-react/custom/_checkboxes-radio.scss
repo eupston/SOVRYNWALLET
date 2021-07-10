@@ -1,15 +1,37 @@
-.daynight.react-toggle--checked .react-toggle-track {
+.react-toggle--checked .react-toggle-track {
   background-color: #4D4D4D;
 }
 
 .react-toggle--checked:hover:not(.react-toggle--disabled) .react-toggle-track {
   background-color: #4D4D4D;
 }
+.react-toggle--checked .react-toggle-thumb {
+  left: 27px;
+  border-color: #2274A5;
+}
+.react-toggle--focus .react-toggle-thumb {
+  box-shadow: 0px 0px 2px 3px #2274A5;
+}
 
-.daynight.react-toggle  {
+.react-toggle-track-check {
+  left: 5px;
+  top: 1px;
+}
+
+.react-toggle-track-x {
+  right: 13px;
+  top: 2px;
+}
+
+.react-toggle--checked .react-toggle-thumb {
+  left: 27px;
+  border-color: #2274A5;
+}
+.react-toggle  {
   margin-top: 12px;
   margin-left: 15px;
 }
+
 
 .form-check{
  margin-top: .5rem;
@@ -164,4 +186,15 @@
 .form-check-radio input[type="radio"]:disabled + .form-check-sign::before,
 .form-check-radio input[type="radio"]:disabled + .form-check-sign::after {
   color: $dark-gray;
+}
+
+@media screen and (max-width: 991px){
+  .react-toggle-track-check {
+    left: 5px;
+    top: 11px;
+  }
+  .react-toggle-track-x {
+    left: 28px;
+    top: 11px;
+  }
 }
