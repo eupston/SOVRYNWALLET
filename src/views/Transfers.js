@@ -16,9 +16,10 @@ function Transfers() {
 
   useEffect(() => {
     const fetchTransfers = async () => {
-      const response = await fetch(`${process.env.REACT_APP_COVALENT_API_URL}/${process.env.REACT_APP_RSK_TESTNET_ID}/address/${process.env.REACT_APP_RSK_TESTNET_TEST_ACT}/transactions_v2/?&key=${process.env.REACT_APP_COVALENT_API_KEY}`);
+      const account = process.env.REACT_APP_RSK_TESTNET_TEST_ACT ? process.env.REACT_APP_RSK_TESTNET_TEST_ACT : undefined;
+      const response = await fetch(`${process.env.REACT_APP_COVALENT_API_URL}/${process.env.REACT_APP_RSK_TESTNET_ID}/address/${account}/transactions_v2/?&key=${process.env.REACT_APP_COVALENT_API_KEY}`);
       const resJson = await response.json();
-      setTransfers(resJson.data.items)
+      if(resJson.data) setTransfers(resJson.data.items)
     }
     fetchTransfers();
   }, []);
@@ -63,7 +64,7 @@ function Transfers() {
             <Card>
               <CardHeader>
                 <CardTitle tag="h4">Token Transfers</CardTitle>
-                <p className="category">${process.env.REACT_APP_RSK_TESTNET_TEST_ACT}</p>
+                <p className="category">{process.env.REACT_APP_RSK_TESTNET_TEST_ACT}</p>
               </CardHeader>
               <CardBody>
                 <Table className="tablesorter"  striped responsive>

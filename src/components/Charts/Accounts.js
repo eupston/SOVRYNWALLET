@@ -8,6 +8,7 @@ class Accounts extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            account: props.account,
             data: [],
             options: {
                 maintainAspectRatio: false,
@@ -65,15 +66,19 @@ class Accounts extends Component {
             currentToken: {},
         };
     }
+
     async componentDidMount() {
-        const response = await fetch(`${process.env.REACT_APP_COVALENT_API_URL}/${process.env.REACT_APP_RSK_TESTNET_ID}/address/${process.env.REACT_APP_RSK_TESTNET_TEST_ACT}/portfolio_v2/?&key=${process.env.REACT_APP_COVALENT_API_KEY}`)
+        const account = process.env.REACT_APP_RSK_TESTNET_TEST_ACT ? process.env.REACT_APP_RSK_TESTNET_TEST_ACT : this.state.account;
+        const response = await fetch(`${process.env.REACT_APP_COVALENT_API_URL}/${process.env.REACT_APP_RSK_TESTNET_ID}/address/${account}/portfolio_v2/?&key=${process.env.REACT_APP_COVALENT_API_KEY}`)
         const resJson = await response.json();
-        this.setState({
-            allTokens: resJson.items,
-            currentToken: resJson.items[0],
-            currentTokenBalances: resJson.items[0].holdings.map(item => (++item.close.balance / 10** resJson.items[0].contract_decimals)).reverse(),
-            currentTokenDates: resJson.items[0].holdings.map(item => item.timestamp.split("T")[0]).reverse()
-        });
+        if(resJson.items){
+            this.setState({
+                allTokens: resJson.items,
+                currentToken: resJson.items[0],
+                currentTokenBalances: resJson.items[0].holdings.map(item => (++item.close.balance / 10** resJson.items[0].contract_decimals)).reverse(),
+                currentTokenDates: resJson.items[0].holdings.map(item => item.timestamp.split("T")[0]).reverse()
+            });
+        }
     }
 
     render() {

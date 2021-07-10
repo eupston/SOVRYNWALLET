@@ -7,6 +7,7 @@ import {
 
 import Accounts from "../components/Charts/Accounts";
 import Balance from "../components/Charts/Balance";
+import {AccountContext} from "../contexts/AccountContext";
 
 function Dashboard() {
   return (
@@ -14,7 +15,11 @@ function Dashboard() {
       <div className="content">
         <Row>
           <Col xs="12">
-            <Accounts />
+            <AccountContext.Consumer>
+              {({account}) => (
+                  <Accounts account={account}/>
+                )}
+            </AccountContext.Consumer>
           </Col>
           <Col xs="12">
             <Balance />

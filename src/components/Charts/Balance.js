@@ -42,10 +42,12 @@ class Balance extends Component {
     async componentDidMount() {
         const response = await fetch(`${process.env.REACT_APP_COVALENT_API_URL}/${process.env.REACT_APP_RSK_TESTNET_ID}/address/${process.env.REACT_APP_RSK_TESTNET_TEST_ACT}/balances_v2/?&key=${process.env.REACT_APP_COVALENT_API_KEY}`)
         const resJson = await response.json();
-        this.setState({
-            allTokens: resJson.data.items,
-            currentToken: resJson.data.items[0],
-        });
+        if(resJson.data){
+            this.setState({
+                allTokens: resJson.data.items,
+                currentToken: resJson.data.items[0],
+            });
+        }
     }
     render() {
         const chartData = (canvas) => {
