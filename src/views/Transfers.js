@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 
 import {
   Card,
@@ -9,20 +9,22 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import {AccountContext} from "../contexts/AccountContext";
 
 function Transfers() {
   const [transfers, setTransfers] = useState([]);
   const rBTC_contract_decimals = 18;
+  const accountContext = useContext(AccountContext);
 
   useEffect(() => {
     const fetchTransfers = async () => {
-      const account = process.env.REACT_APP_RSK_TESTNET_TEST_ACT ? process.env.REACT_APP_RSK_TESTNET_TEST_ACT : undefined;
+      const account = process.env.REACT_APP_RSK_TESTNET_TEST_ACT ? process.env.REACT_APP_RSK_TESTNET_TEST_ACT : accountContext.account;
       const response = await fetch(`${process.env.REACT_APP_COVALENT_API_URL}/${process.env.REACT_APP_RSK_TESTNET_ID}/address/${account}/transactions_v2/?&key=${process.env.REACT_APP_COVALENT_API_KEY}`);
       const resJson = await response.json();
       if(resJson.data) setTransfers(resJson.data.items)
     }
     fetchTransfers();
-  }, []);
+  }, [accountContext]);
 
   const createTransferElements = () => {
     return transfers.map((transfer, id) => {

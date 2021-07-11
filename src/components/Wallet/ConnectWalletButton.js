@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 
 import {Button} from "reactstrap/es";
 import Web3 from "web3";
@@ -7,6 +7,7 @@ import WalletConnectProvider from 'walletconnect';
 import {AccountContext} from "../../contexts/AccountContext";
 
 const ConnectWalletButton = () => {
+    const accountContext = useContext(AccountContext);
     const [isWalletConnected, setIsWalletConnected] = useState(false);
 
     const connectToWalletHandler = async (changeAccount) => {
@@ -25,25 +26,21 @@ const ConnectWalletButton = () => {
             const web3 = new Web3(provider);
             const accounts = await web3.eth.getAccounts();
             if(accounts.length > 0){
-                changeAccount(accounts[0])
+                changeAccount(accounts[0]);
                 setIsWalletConnected(true);
             }
     }
 
     return (
-        <AccountContext.Consumer>
-            {({account, changeAccount}) => (
-                <React.Fragment>
-                <h4>{account ? `Welcome ${account.substring(0,10) + "..."}` : null} </h4>
-                    {!isWalletConnected ?
-                    <Button onClick={() => connectToWalletHandler(changeAccount)}>
-                    Connect To Wallet
-                    </Button>
-                    :
-                    null}
-                </React.Fragment>
-            )}
-        </AccountContext.Consumer>
+        <React.Fragment>
+        <h4>{accountContext.account ? `Welcome ${accountContext.account.substring(0,10) + "..."}` : null} </h4>
+            {!isWalletConnected ?
+            <Button onClick={() => connectToWalletHandler(accountContext.changeAccount)}>
+                Connect To Wallet
+            </Button>
+            :
+            null}
+        </React.Fragment>
     );
 };
 

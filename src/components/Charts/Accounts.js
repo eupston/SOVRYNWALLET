@@ -1,5 +1,5 @@
 import {Line} from "react-chartjs-2";
-import {Card, CardBody, CardHeader, CardTitle, Col, Row, ButtonGroup, Button} from "reactstrap";
+import {Button, ButtonGroup, Card, CardBody, CardHeader, CardTitle, Col, Row} from "reactstrap";
 
 import React, {Component} from 'react';
 import {truncateFloat} from "../../utils/Numbers";
@@ -8,7 +8,7 @@ class Accounts extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            account: props.account,
+            account: props.accountContext.account,
             data: [],
             options: {
                 maintainAspectRatio: false,
@@ -67,18 +67,36 @@ class Accounts extends Component {
         };
     }
 
-    async componentDidMount() {
-        const account = process.env.REACT_APP_RSK_TESTNET_TEST_ACT ? process.env.REACT_APP_RSK_TESTNET_TEST_ACT : this.state.account;
+    fetchAccountHistorical = async () => {
+        const account = process.env.REACT_APP_RSK_TESTNET_TEST_ACT ? process.env.REACT_APP_RSK_TESTNET_TEST_ACT : this.props.accountContext.account;
         const response = await fetch(`${process.env.REACT_APP_COVALENT_API_URL}/${process.env.REACT_APP_RSK_TESTNET_ID}/address/${account}/portfolio_v2/?&key=${process.env.REACT_APP_COVALENT_API_KEY}`)
-        const resJson = await response.json();
-        if(resJson.items){
+        return await response.json();
+    };
+
+    setAccountHistorical = (responseJson) => {
+        if(responseJson.items){
             this.setState({
-                allTokens: resJson.items,
-                currentToken: resJson.items[0],
-                currentTokenBalances: resJson.items[0].holdings.map(item => (++item.close.balance / 10** resJson.items[0].contract_decimals)).reverse(),
-                currentTokenDates: resJson.items[0].holdings.map(item => item.timestamp.split("T")[0]).reverse()
+                allTokens: responseJson.items,
+                currentToken: responseJson.items[0],
+                currentTokenBalances: responseJson.items[0].holdings.map(item => (++item.close.balance / 10** responseJson.items[0].contract_decimals)).reverse(),
+                currentTokenDates: responseJson.items[0].holdings.map(item => item.timestamp.split("T")[0]).reverse()
             });
         }
+    }
+
+    async componentDidUpdate(prevProps){
+        if(prevProps.accountContext !== this.props.accountContext){
+            const resJson = await this.fetchAccountHistorical();
+            this.setAccountHistorical(resJson);
+            this.setState({
+                account: this.props.accountContext.account
+            });
+        }
+    }
+
+    async componentDidMount() {
+        const resJson = await this.fetchAccountHistorical();
+        this.setAccountHistorical(resJson);
     }
 
     render() {

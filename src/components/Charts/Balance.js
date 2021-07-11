@@ -12,11 +12,13 @@ import {Pie} from "react-chartjs-2";
 
 import React, {Component} from 'react';
 import {truncateFloat} from "../../utils/Numbers";
+import {AccountContext} from "../../contexts/AccountContext";
 
 class Balance extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            account: props.accountContext.account,
             data: [],
             options: {
                 maintainAspectRatio: false,
@@ -39,16 +41,37 @@ class Balance extends Component {
             currentToken: {},
         };
     }
-    async componentDidMount() {
-        const response = await fetch(`${process.env.REACT_APP_COVALENT_API_URL}/${process.env.REACT_APP_RSK_TESTNET_ID}/address/${process.env.REACT_APP_RSK_TESTNET_TEST_ACT}/balances_v2/?&key=${process.env.REACT_APP_COVALENT_API_KEY}`)
-        const resJson = await response.json();
-        if(resJson.data){
+
+    fetchAccountBalance = async () => {
+        const account = process.env.REACT_APP_RSK_TESTNET_TEST_ACT ? process.env.REACT_APP_RSK_TESTNET_TEST_ACT : this.props.accountContext.account;
+        const response = await fetch(`${process.env.REACT_APP_COVALENT_API_URL}/${process.env.REACT_APP_RSK_TESTNET_ID}/address/${account}/balances_v2/?&key=${process.env.REACT_APP_COVALENT_API_KEY}`)
+        return await response.json();
+    };
+
+    setAccountBalance = (responseJson) => {
+        if(responseJson.data){
             this.setState({
-                allTokens: resJson.data.items,
-                currentToken: resJson.data.items[0],
+                allTokens: responseJson.data.items,
+                currentToken: responseJson.data.items[0],
             });
         }
     }
+
+    async componentDidUpdate(prevProps){
+        if(prevProps.accountContext !== this.props.accountContext){
+            const resJson = await this.fetchAccountBalance();
+            this.setAccountBalance(resJson);
+            this.setState({
+                account: this.props.accountContext.account
+            });
+        }
+    }
+
+    async componentDidMount() {
+        const resJson = await this.fetchAccountBalance();
+        this.setAccountBalance(resJson);
+    }
+
     render() {
         const chartData = (canvas) => {
             let ctx = canvas.getContext("2d");

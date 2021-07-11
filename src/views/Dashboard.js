@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import {
   Row,
   Col,
@@ -10,19 +10,16 @@ import Balance from "../components/Charts/Balance";
 import {AccountContext} from "../contexts/AccountContext";
 
 function Dashboard() {
+  const accountContext = useContext(AccountContext);
   return (
     <>
       <div className="content">
         <Row>
           <Col xs="12">
-            <AccountContext.Consumer>
-              {({account}) => (
-                  <Accounts account={account}/>
-                )}
-            </AccountContext.Consumer>
+            <Accounts accountContext={accountContext}/>
           </Col>
           <Col xs="12">
-            <Balance />
+            <Balance accountContext={accountContext} />
           </Col>
         </Row>
       </div>
