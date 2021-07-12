@@ -1,0 +1,20 @@
+.connect_wallet {
+    position: relative;
+    top: 5px;
+}
+
+.wallet_account {
+    position: relative;
+    top: 13px;
+    right: 5px;
+}
+
+@media screen and (max-width: 991px){
+    .connect_wallet {
+        left: 20px;
+    }
+    .wallet_account {
+        color: #0a0c0d;
+        left: 18px;
+    }
+}

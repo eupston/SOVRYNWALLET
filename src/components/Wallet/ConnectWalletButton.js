@@ -5,6 +5,7 @@ import Web3 from "web3";
 import Web3Modal from 'web3modal'
 import WalletConnectProvider from 'walletconnect';
 import {AccountContext} from "../../contexts/AccountContext";
+import './connect_wallet.css';
 
 const ConnectWalletButton = () => {
     const accountContext = useContext(AccountContext);
@@ -33,9 +34,9 @@ const ConnectWalletButton = () => {
 
     return (
         <React.Fragment>
-        <h4>{accountContext.account ? `Welcome ${accountContext.account.substring(0,10) + "..."}` : null} </h4>
+        <h4 className="wallet_account" >{accountContext.account ? `Welcome ${accountContext.account.substring(0,10) + "..."}` : null} </h4>
             {!isWalletConnected ?
-            <Button onClick={() => connectToWalletHandler(accountContext.changeAccount)}>
+            <Button className="connect_wallet" outline color="info" onClick={() => connectToWalletHandler(accountContext.changeAccount)}>
                 Connect To Wallet
             </Button>
             :
