@@ -8,6 +8,7 @@ import {
 import Accounts from "../components/Charts/Accounts";
 import Balance from "../components/Charts/Balance";
 import {AccountContext} from "../contexts/AccountContext";
+import Portfolio from "../components/Charts/Portfolio";
 
 function Dashboard() {
   const accountContext = useContext(AccountContext);
@@ -20,6 +21,9 @@ function Dashboard() {
           </Col>
           <Col xs="12">
             <Balance accountContext={accountContext} />
+          </Col>
+          <Col xs="12">
+            <Portfolio accountContext={accountContext} />
           </Col>
         </Row>
       </div>

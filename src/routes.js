@@ -16,11 +16,8 @@
 
 */
 import Dashboard from "views/Dashboard.js";
-import Icons from "views/Icons.js";
 import NFTs from "views/NFTs.js";
 import Transfers from "views/Transfers.js";
-import Typography from "views/Typography.js";
-import UserProfile from "views/UserProfile.js";
 
 var routes = [
   {
@@ -42,27 +39,6 @@ var routes = [
     name: "Transfers",
     icon: "tim-icons icon-upload",
     component: Transfers,
-    layout: "/admin",
-  },
-  {
-    path: "/icons",
-    name: "Icons",
-    icon: "tim-icons icon-atom",
-    component: Icons,
-    layout: "/admin",
-  },
-  {
-    path: "/user-profile",
-    name: "User Profile",
-    icon: "tim-icons icon-single-02",
-    component: UserProfile,
-    layout: "/admin",
-  },
-  {
-    path: "/typography",
-    name: "Typography",
-    icon: "tim-icons icon-align-center",
-    component: Typography,
     layout: "/admin",
   }
 ];
