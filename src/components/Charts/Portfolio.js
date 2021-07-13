@@ -1,5 +1,5 @@
 import {Button, ButtonGroup, Card, CardBody, CardHeader, CardTitle, Col, Row} from "reactstrap";
-import {Doughnut, Pie} from "react-chartjs-2";
+import {Doughnut} from "react-chartjs-2";
 
 import React, {Component} from 'react';
 import {getMarketTokenPrice} from '../../utils/priceConverter';

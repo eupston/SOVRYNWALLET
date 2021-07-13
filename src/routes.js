@@ -18,6 +18,10 @@
 import Dashboard from "views/Dashboard.js";
 import NFTs from "views/NFTs.js";
 import Transfers from "views/Transfers.js";
+import Portfolio from "./components/Charts/Portfolio";
+import {AccountContext} from "./contexts/AccountContext";
+import {useContext} from "react";
+import PortfolioView from "./views/PortfolioView";
 
 var routes = [
   {
@@ -28,9 +32,16 @@ var routes = [
     layout: "/admin",
   },
   {
+    path: "/portfolio",
+    name: "Portfolio",
+    icon: "tim-icons icon-chart-pie-36",
+    component: PortfolioView,
+    layout: "/admin",
+  },
+  {
     path: "/nft",
     name: "NFTs",
-    icon: "tim-icons icon-app",
+    icon: "tim-icons icon-palette",
     component: NFTs,
     layout: "/admin",
   },
