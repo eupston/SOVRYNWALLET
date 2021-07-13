@@ -24,7 +24,7 @@ jobs:
           yarn config set network-timeout 300000
           yarn
       - name: Build project
-        run: yarn run build
+        run: CI='' yarn run build
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v2
