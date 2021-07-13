@@ -22,14 +22,12 @@ import PerfectScrollbar from "perfect-scrollbar";
 
 // core components
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
-import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
 
-import logo from "assets/img/sovryn-logo-circle.svg";
+import logo from "assets/img/sovryn-logo-circle.png";
 import { BackgroundColorContext } from "contexts/BackgroundColorContext";
-import {AccountContext} from "../../contexts/AccountContext";
 
 var ps;
 

@@ -61,4 +61,4 @@ jobs:
           --url https://api.github.com/repos/${{ github.repository }} \
           --header 'authorization: Bearer ${{ secrets.SOVRYNWALLET_PERSONAL_TOKEN }}' \
           --header 'content-type: application/json' \
-          --data '{"name":"SOVRYNWALLET", "homepage":"https://gateway.pinata.cloud/ipfs/'"$IPFS_CID"'"}'
+          --data '{"name":"sovryn-wallet-dashboard", "homepage":"https://gateway.pinata.cloud/ipfs/'"$IPFS_CID"'"}'
