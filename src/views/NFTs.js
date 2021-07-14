@@ -7,6 +7,7 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import nft_default_img from "assets/img/default-NFT.png";
 
 function NFTs() {
   const [NFTs, setNFTs] = useState([]);
@@ -28,13 +29,13 @@ function NFTs() {
                 <CardTitle tag="h4">{`Token Id: ${nft.token_id}`}</CardTitle>
               </CardHeader>
               <CardBody>
-                <p>{nft.contract_name ? `Contract Name: ${nft.contract_name}`: null}</p>
-                <p>{nft.contract_ticker_symbol ? `Contract Ticker Symbol: ${nft.contract_ticker_symbol}`: null}</p>
-                <p>{nft.supports_erc ? `Supports ERC: ${nft.supports_erc}`: null}</p>
+                <p>{nft.contract_name ? `Contract Name: ${nft.contract_name}`: `Contract Name:`}</p>
+                <p>{nft.contract_ticker_symbol ? `Contract Ticker Symbol: ${nft.contract_ticker_symbol}`:  `Contract Ticker Symbol:`}</p>
+                <p>{nft.supports_erc ? `Supports ERC: ${nft.supports_erc}`: `Supports ERC:`}</p>
               </CardBody>
               <img
                   style={{"margin": "50px"}}
-                  src={nft.logo_url? nft.logo_url : require("assets/img/default_NFT_img.png").default}
+                  src={nft.logo_url? nft.logo_url : process.env.PUBLIC_URL + nft_default_img}
                   alt="">
               </img>
             </Card>

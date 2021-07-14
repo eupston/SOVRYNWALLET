@@ -2,7 +2,7 @@
   "name": "sovryn-wallet-dashboard",
   "version": "1.2.0",
   "private": true,
-  "homepage": "./",
+  "homepage": ".",
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.1",
     "bootstrap": "4.5.3",
