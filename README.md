@@ -13,7 +13,7 @@ Project Presentation Slides [Here](https://docs.google.com/presentation/d/1awgxd
  
 Video Presentation [Here](https://www.youtube.com/watch?v=2mpabwZrDGU).
 
-Live Host dApp [Here](https://gateway.pinata.cloud/ipfs/QmWdi49rfaVGLCCMuodvp5bxMpMXVjUWnBZqP9B66BE9og) or can find link in the about section. 
+Live dApp [Here](https://gateway.pinata.cloud/ipfs/QmWdi49rfaVGLCCMuodvp5bxMpMXVjUWnBZqP9B66BE9og) or can find link in the about section. 
 
 ----------
 
